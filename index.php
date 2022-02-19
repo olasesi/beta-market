@@ -54,7 +54,7 @@ if(isset($_SESSION['user_id'])){
             <?php
 if(isset($_SESSION['user_id'])){
    echo  '<small>banner 1 &#38; banner 2 (390x193)px</small>';
-}
+ }
    ?>
 
 <?php
@@ -388,9 +388,9 @@ if(isset($_SESSION['user_id'])){
             <div class="row">
                
                 <?php
-if(isset($_SESSION['user_id'])){
-   echo  '<small>banner 3, 4 &#38; 5 (530x285)px</small>';
-}
+// if(isset($_SESSION['user_id'])){
+//    echo  '<small>banner 3, 4 &#38; 5 (530x285)px</small>';
+// }
    ?>
 
 
@@ -471,50 +471,86 @@ if(isset($_SESSION['user_id'])){
             </div>
         </div>
     </div> -->
+
+<?php 
+$query_page_section =  mysqli_query($connect, "SELECT products_categories_name FROM products_categories ORDER BY products_categories_id ASC LIMIT 1") or die(db_conn_error);
+
+?>    
     <div class="ps-product-list ps-clothings">
         <div class="ps-container">
             <div class="ps-section__header">
-                <h3>Consumer Electronics</h3>
+                <?php
+            while($while_query_page_section=mysqli_fetch_array($query_page_section)){
+echo '<h3>'.$while_query_page_section['products_categories_name']. '</h3>';
+
+$pro_cat_name =$while_query_page_section['products_categories_name'];
+}?>
                 <ul class="ps-section__links">
-                    <li><a href="shop-grid.html">New Arrivals</a></li>
-                    <li><a href="shop-grid.html">Best seller</a></li>
-                    <li><a href="shop-grid.html">Must Popular</a></li>
-                    <li><a href="shop-grid.html">View All</a></li>
+                   
+                
+                <li><a href="products-categories.php?categories=<?php $while_query_page_section['products_categories_name'];?>&arrivals=1">New Arrivals</a></li>
+                    <li><a href="products-categories.php?categories=<?php $while_query_page_section['products_categories_name'];?>&sellers=1">Best seller</a></li>
+                    <li><a href="products-categories.php?categories=<?php $while_query_page_section['products_categories_name'];?>&popular=1">Must Popular</a></li>
+                    <li><a href="products-categories.php?categories=<?php $while_query_page_section['products_categories_name'];?>&all=1">View All</a></li>
                 </ul>
             </div>
             <div class="ps-section__content">
                 <div class="ps-carousel--nav owl-slider" data-owl-auto="false" data-owl-loop="false" data-owl-speed="10000" data-owl-gap="0" data-owl-nav="true" data-owl-dots="true" data-owl-item="7" data-owl-item-xs="2" data-owl-item-sm="2" data-owl-item-md="3" data-owl-item-lg="4"
                     data-owl-item-xl="6" data-owl-duration="1000" data-owl-mousedrag="on">
-                    <div class="ps-product">
-                        <div class="ps-product__thumbnail">
-                            <a href="product-default.html"><img src="img/products/electronic/1.jpg" alt="" /></a>
-                            <div class="ps-product__badge">-16%</div>
-                            <ul class="ps-product__actions">
-                                <li><a href="#" data-toggle="tooltip" data-placement="top" title="Add To Cart"><i class="icon-bag2"></i></a></li>
-                                <li><a href="#" data-placement="top" title="Quick View" data-toggle="modal" data-target="#product-quickview"><i class="icon-eye"></i></a></li>
-                                <li><a href="#" data-toggle="tooltip" data-placement="top" title="Add to Whishlist"><i class="icon-heart"></i></a></li>
-                                <li><a href="#" data-toggle="tooltip" data-placement="top" title="Compare"><i class="icon-chart-bars"></i></a></li>
-                            </ul>
-                        </div>
-                        <div class="ps-product__container"><a class="ps-product__vendor" href="#">Go Pro</a>
-                            <div class="ps-product__content"><a class="ps-product__title" href="product-default.html">Marshall Kilburn Portable Wireless</a>
-                                <div class="ps-product__rating">
-                                    <select class="ps-rating" data-read-only="true">
-                                            <option value="1">1</option>
-                                            <option value="1">2</option>
-                                            <option value="1">3</option>
-                                            <option value="1">4</option>
-                                            <option value="2">5</option>
-                                        </select><span>01</span>
-                                </div>
-                                <p class="ps-product__price sale">$567.99 <del>$670.00 </del></p>
-                            </div>
-                            <div class="ps-product__content hover"><a class="ps-product__title" href="product-default.html">Marshall Kilburn Portable Wireless</a>
-                                <p class="ps-product__price sale">$567.99 <del>$670.00 </del></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="ps-product">
+                    
+                    <?php 
+$query_sel_pro_sec =  mysqli_query($connect, "SELECT products_name, products_price, products_image FROM products WHERE products_sub_categories = '".$pro_cat_name."' ORDER BY products_id ASC LIMIT 15") or die(db_conn_error);
+
+while($while_sel_pro=mysqli_fetch_array($query_sel_pro_sec)){
+
+echo '
+    <div class="ps-product">
+    <div class="ps-product__thumbnail">
+        <a href="product-default.html"><img src="images/products/'.$while_sel_pro['products_image'].'" alt="'.$while_sel_pro['products_name'].'" /></a>
+    
+        <ul class="ps-product__actions">
+            <li><a href="#" data-toggle="tooltip" data-placement="top" title="Add To Cart"><i class="icon-bag2"></i></a></li>
+            <li><a href="#" data-placement="top" title="Quick View" data-toggle="modal" data-target="#product-quickview"><i class="icon-eye"></i></a></li>
+           
+        </ul>
+    </div>
+    <div class="ps-product__container"><a class="ps-product__vendor" href="#">Go Pro</a>
+        <div class="ps-product__content"><a class="ps-product__title" href="product-default.html">'.$while_sel_pro['products_name'].'</a>
+            <div class="ps-product__rating">
+                <select class="ps-rating" data-read-only="true">
+                        <option value="1">1</option>
+                        <option value="1">2</option>
+                        <option value="1">3</option>
+                        <option value="1">4</option>
+                        <option value="2">5</option>
+                    </select>
+                    <span></span>
+            </div>
+            <p class="ps-product__price sale">$567.99 <del>$670.00 </del></p>
+        </div>
+        <div class="ps-product__content hover"><a class="ps-product__title" href="product-default.html">'.$while_sel_pro['products_name'].'</a>
+            <p class="ps-product__price sale">'.$while_sel_pro['products_price'].' 
+                
+            <del></del>
+        
+        </p>
+        </div>
+    </div>
+
+   
+</div>';
+
+
+
+
+
+}
+?> 
+ 
+                    
+                   
+
+                    <!-- <div class="ps-product">
                         <div class="ps-product__thumbnail">
                             <a href="product-default.html"><img src="img/products/electronic/2.jpg" alt="" /></a>
                             <div class="ps-product__badge hot">hot</div>
@@ -542,8 +578,8 @@ if(isset($_SESSION['user_id'])){
                                 <p class="ps-product__price">$101.99</p>
                             </div>
                         </div>
-                    </div>
-                    <div class="ps-product">
+                    </div> -->
+                    <!-- <div class="ps-product">
                         <div class="ps-product__thumbnail">
                             <a href="product-default.html"><img src="img/products/electronic/3.jpg" alt="" /></a>
                             <div class="ps-product__badge">-25%</div>
@@ -768,9 +804,15 @@ if(isset($_SESSION['user_id'])){
                                 <p class="ps-product__price">$42.00</p>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
+
+
+
+
+
+
         </div>
     </div>
     
@@ -1028,29 +1070,40 @@ if(isset($_SESSION['user_id'])){
 
 
             <?php
-if(isset($_SESSION['user_id'])){
-   echo  '<small>banner 3, 4 &#38; 5 (530x285)px</small>';
-}
+// if(isset($_SESSION['user_id'])){
+//    echo  '<small>banner 6(1090x245)px, banner 7(530x245)px</small>';
+// }
    ?>
 
 
 <?php
-                   	$query_banner_select =  mysqli_query($connect, "SELECT banner_image FROM banner ORDER BY banner_id ASC LIMIT 5,2") or die(db_conn_error);
-
-                   while($looping_banner=mysqli_fetch_array($query_banner_select)){
-            echo ' <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 "><a class="ps-collection"><img src="images/banners/'.$looping_banner['banner_image'].'" alt="'.$looping_banner['banner_image'].'"></a></div>';
+$query_banner_select =  mysqli_query($connect, "SELECT banner_image FROM banner WHERE banner_name='banner 6'") or die(db_conn_error);
+while($looping_banner=mysqli_fetch_array($query_banner_select)){
+echo ' 
+            <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12 "><a class="ps-collection"><img src="images/banners/'.$looping_banner['banner_image'].'" alt="'.$looping_banner['banner_image'].'"></a> </div>';
 
                    }
 
-                  
-                   ?>
+?>
                
-                <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12 ">
-                    <a class="ps-collection" href="#"><img src="img/collection/home-1/ad-1.jpg" alt=""></a>
-                </div>
-                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 ">
-                    <a class="ps-collection" href="#"><img src="img/collection/home-1/ad-2.jpg" alt=""></a>
-                </div>
+               <?php
+$query_banner_select =  mysqli_query($connect, "SELECT banner_image FROM banner WHERE banner_name='banner 7'") or die(db_conn_error);
+while($looping_banner=mysqli_fetch_array($query_banner_select)){
+echo ' 
+<div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 "><a class="ps-collection"><img src="images/banners/'.$looping_banner['banner_image'].'" alt="'.$looping_banner['banner_image'].'"></a> </div>';
+
+                   }
+
+?>
+                  
+               
+               
+               
+               
+               
+               
+                
+               
             </div>
         </div>
     </div>
